@@ -1,144 +1,139 @@
-var express = require('express');
-var app = express();
-var multer = require('multer')
-var cors = require('cors');
-const fs = require("fs");
-const createCsvWriter = require('csv-writer').createObjectCsvWriter;
-const pdf = require('pdf-parse');
-const months = ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC',]
-
-global.thing = ''
-
-const monthcheck = (text) =>{
-    for (let i = 0; i < months.length; i++) {
-        if (months[i] === text){
-            return true
-        }
+import React, { Component } from 'react';
+import axios from 'axios';
+import {Progress} from 'reactstrap';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+class App extends Component {
+  constructor(props) {
+    super(props);
+      this.state = {
+        selectedFile: null,
+        loaded:0
+      }
+   
+  }
+  checkMimeType=(event)=>{
+    //getting file object
+    let files = event.target.files 
+    //define message container
+    let err = []
+    // list allow mime type
+   const types = ['application/pdf']
+    // loop access array
+    for(var x = 0; x<files.length; x++) {
+     // compare file type find doesn't matach
+         if (types.every(type => files[x].type !== type)) {
+         // create error message and assign to container
+             err[x] = 'Only pdf files are supported.';
+         //err[x] = files[x].type+' is not a supported format\nOnly pdf files are supported.';
+       }
+     };
+     for(var z = 0; z<err.length; z++) {// if message not same old that mean has error 
+         // discard selected file
+        toast.error(err[z])
+        event.target.value = null
     }
+   return true;
+  }
+  maxSelectFile=(event)=>{
+    let files = event.target.files
+        if (files.length > 3) { 
+           const msg = 'Only 3 can be uploaded at a time'
+           event.target.value = null
+           toast.warn(msg)
+           return false;
+      }
+    return true;
+ }
+ checkFileSize=(event)=>{
+  let files = event.target.files
+  let size = 2000000 
+  let err = []; 
+  for(var x = 0; x<files.length; x++) {
+  if (files[x].size > size) {
+   err[x] = files[x].type+'is too large, please pick a smaller file\n';
+ }
+};
+for(var z = 0; z<err.length; z++) {// if message not same old that mean has error 
+  // discard selected file
+ toast.error(err[z])
+ event.target.value = null
+}
+return true;
 }
 
+  onClickHandler = () => {
+    const data = new FormData()
+      if (this.state.selectedFile != null){
+          for(var x = 0; x<this.state.selectedFile.length; x++) {
+              data.append('file', this.state.selectedFile[x])
+          }
+          axios.post("http://24.84.236.252:8000/upload", data, {
+              onUploadProgress: ProgressEvent => {
+                  this.setState({
+                      loaded: (ProgressEvent.loaded / ProgressEvent.total*100),
+                  })
+              },
+          })
+              .then(res => { // then print response status
+                  toast.success('Upload Successful!')
+              })
+              .catch(err => { // then print response status
+                  toast.error('Upload failed! Check server status!')
+              })
+      }
+    }
+    onClick2Handler = () => {
+      const data = 'del'
+            axios.post("http://24.84.236.252:8000/delete", data, {
+                onUploadProgress: ProgressEvent => {
+                    this.setState({
+                        loaded: (ProgressEvent.loaded / ProgressEvent.total*100),
+                    })
+                },
+            })
+                .then(res => {
+                })
+                .catch(err => {
+                })
 
-app.use(cors())
-
-const csvwriter = (originalname) =>{
-    pdf(fs.readFileSync('public/' + originalname)).then(function(data) {
-        const records = []
-        const thing = data.text.split('\n')
-        for (let i = 0; i < thing.length; i++) {
-            const splitsentence = thing[i].split(' ')
-            if (monthcheck(splitsentence[0]) === true){
-                const splitten = thing[i].split(' ')
-                const splittence = []
-                for (let k = 0; k < splitten.length; k++) {
-                    if (splitten[k] != ''){
-                        splittence.push(splitten[k])
-                    }
-                }
-                let trans = splittence[0] + ' ' + splittence[1]
-                let pos = splittence[2] + ' ' + splittence[3]
-                let desc = ''
-                for (let j = 0; j < splittence.length; j++) {
-                    if (j >= 4){
-                        desc += splittence[j]
-                        desc += ' '
-                    }
-                }
-                desc += '\n' + thing[i + 1]
-                let am = thing[i + 2]
-                records.push({transdate: trans, posdate: pos, actdesc: desc, amount: am})
-            }
+    }
+    onChangeHandler=event=>{
+        var files = event.target.files
+        if(this.maxSelectFile(event) && this.checkMimeType(event) && this.checkFileSize(event)){
+            // if return true allow to setState
+            this.setState({
+                selectedFile: files,
+                loaded:0
+            })
         }
-        const csvWriter = createCsvWriter({
-            //path: 'public/' + originalname.split('.')[0] + '.csv',
-            path: 'public/convert.csv',
-            header: [
-                {id: 'transdate', title: 'Transaction Date'},
-                {id: 'posdate', title: 'Posting Date'},
-                {id: 'actdesc', title: 'Activity Description'},
-                {id: 'amount', title: 'Amount ($)'}
-            ]
-        });
-        csvWriter.writeRecords(records)       // returns a promise
-            .then(() => {
-                console.log('...Done');
-                //console.log(records)
-                try {
-                    fs.unlinkSync('public/' + originalname)
-                    //file removed
-                } catch(err) {
-                    console.error(err)
-                }
-                setTimeout(function(){
-                    try {
-                        if (fs.existsSync('public/convert.csv')) {
-                            try {
-                                fs.unlinkSync('public/convert.csv')
-                                //file removed
-                            } catch(err) {
-                                console.error(err)
-                            }
-                        }
-                    } catch(err) {
-                        console.error(err)
-                    }
-                }, 300000);
-            });
 
-    })
+    }
 
+  render() {
+    return (
+      <div class="container">
+	      <div class="row">
+      	  <div class="offset-md-3 col-md-6">
+               <div class="form-group files">
+                   <h1>RBC PDF To CSV Converter</h1>
+                <p>Upload Your PDF File </p>
+                <input type="file" class="form-control" multiple onChange={this.onChangeHandler}/>
+              </div>  
+              <div class="form-group">
+              <ToastContainer />
+              <Progress max="100" color="success" value={this.state.loaded} >{Math.round(this.state.loaded,2) }%</Progress>
+        
+              </div> 
+              
+              <button type="button" class="btn btn-success btn-block" onClick={this.onClickHandler}>Upload</button>
+              <a type="button" class="btn btn-success btn-block" onClick={this.onClick2Handler} href='/convert.csv' download>Download CSV</a>
+	      </div>
+
+      </div>
+      </div>
+    );
+  }
 }
 
-
-
-var storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-      cb(null, 'public')
-    },
-    filename: function (req, file, cb) {
-      cb(null,file.originalname)
-        thing = file.originalname
-    }
-  })
-  
-  var upload = multer({ storage: storage }).array('file')
-  
-app.get('/',function(req,res){
-    return res.send('Hello Server')
-})
-app.post('/upload',function(req, res) {
-    
-    upload(req, res, function (err) {
-     
-        if (err instanceof multer.MulterError) {
-            return res.status(500).json(err)
-          // A Multer error occurred when uploading.
-        } else if (err) {
-            return res.status(500).json(err)
-          // An unknown error occurred when uploading.
-        }
-        csvwriter(thing)
-        return res.status(200).send(req.file)
-        // Everything went fine.
-      })
-});
-
-app.post('/delete',function(req, res) {
-    setTimeout(function(){
-        try {
-            if (fs.existsSync('public/convert.csv')) {
-                try {
-                    fs.unlinkSync('public/convert.csv')
-                    //file removed
-                } catch(err) {
-                    console.error(err)
-                }
-            }
-        } catch(err) {
-            console.error(err)
-        }
-    }, 1000);
-});
-
-app.listen(8000, function() {
-    console.log('App running on port 8000');
-});
+export default App;
