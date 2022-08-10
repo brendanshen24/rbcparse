@@ -4,12 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="cfe9fc64-a3c1-41e0-9272-249d28a39f5a" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/public/convert.csv" afterDir="false" />
+    <list default="true" id="cfe9fc64-a3c1-41e0-9272-249d28a39f5a" name="Changes" comment="fixed downloading issue">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server.js" beforeDir="false" afterPath="$PROJECT_DIR$/server.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/yarn.lock" beforeDir="false" afterPath="$PROJECT_DIR$/yarn.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -77,7 +75,7 @@
       <workItem from="1660079916030" duration="14004000" />
       <workItem from="1660146792657" duration="958000" />
       <workItem from="1660153486327" duration="630000" />
-      <workItem from="1660154334893" duration="6284000" />
+      <workItem from="1660154334893" duration="8702000" />
     </task>
     <task id="LOCAL-00001" summary="bruh">
       <created>1660146732942</created>
@@ -93,7 +91,14 @@
       <option name="project" value="LOCAL" />
       <updated>1660157546075</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="fixed downloading issue">
+      <created>1660162144805</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1660162144805</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -118,7 +123,8 @@
     </ignored-roots>
     <MESSAGE value="bruh" />
     <MESSAGE value="server and client only requires one command" />
-    <option name="LAST_COMMIT_MESSAGE" value="server and client only requires one command" />
+    <MESSAGE value="fixed downloading issue" />
+    <option name="LAST_COMMIT_MESSAGE" value="fixed downloading issue" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

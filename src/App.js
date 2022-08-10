@@ -79,7 +79,7 @@ return true;
                   toast.success('Upload Successful!')
               })
               .catch(err => { // then print response status
-                  toast.error('upload fail')
+                  toast.error('Upload failed! Check server status!')
               })
       }
     }
