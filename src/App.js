@@ -68,7 +68,7 @@ return true;
           for(var x = 0; x<this.state.selectedFile.length; x++) {
               data.append('file', this.state.selectedFile[x])
           }
-          axios.post("http://https://rbc-pdf-to-csv.herokuapp.com/serve/upload", data, {
+          axios.post("https://https://rbc-pdf-to-csv.herokuapp.com/serve/upload", data, {
               onUploadProgress: ProgressEvent => {
                   this.setState({
                       loaded: (ProgressEvent.loaded / ProgressEvent.total*100),
@@ -85,7 +85,7 @@ return true;
     }
     onClick2Handler = () => {
       const data = 'del'
-            axios.post("http://https://rbc-pdf-to-csv.herokuapp.com/serve/delete", data, {
+            axios.post("https://https://rbc-pdf-to-csv.herokuapp.com/serve/delete", data, {
                 onUploadProgress: ProgressEvent => {
                     this.setState({
                         loaded: (ProgressEvent.loaded / ProgressEvent.total*100),
