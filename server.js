@@ -139,6 +139,6 @@ app.post('/delete',function(req, res) {
     }, 1000);
 });
 
-app.listen('https://rbc-pdf-to-csv.herokuapp.com/serve', function() {
+app.listen(8000, function() {
     console.log('App running on port 8000');
 });
