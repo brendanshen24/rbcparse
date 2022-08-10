@@ -5,7 +5,6 @@ var cors = require('cors');
 const fs = require("fs");
 const createCsvWriter = require('csv-writer').createObjectCsvWriter;
 const pdf = require('pdf-parse');
-const schedule = require("node-schedule");
 const months = ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC',]
 
 global.thing = ''
@@ -69,16 +68,22 @@ const csvwriter = (originalname) =>{
                 } catch(err) {
                     console.error(err)
                 }
-                const fiveminbefore = schedule.scheduleJob(300000, function(){
+                setTimeout(function(){
                     try {
-                        fs.unlinkSync('public/convert.csv')
-                        //file removed
+                        if (fs.existsSync('public/convert.csv')) {
+                            try {
+                                fs.unlinkSync('public/convert.csv')
+                                //file removed
+                            } catch(err) {
+                                console.error(err)
+                            }
+                        }
                     } catch(err) {
                         console.error(err)
                     }
-                });
-
+                }, 300000);
             });
+
     })
 
 }
@@ -118,12 +123,20 @@ app.post('/upload',function(req, res) {
 });
 
 app.post('/delete',function(req, res) {
-    try {
-        fs.unlinkSync('public/convert.csv')
-        //file removed
-    } catch(err) {
-        console.error(err)
-    }
+    setTimeout(function(){
+        try {
+            if (fs.existsSync('public/convert.csv')) {
+                try {
+                    fs.unlinkSync('public/convert.csv')
+                    //file removed
+                } catch(err) {
+                    console.error(err)
+                }
+            }
+        } catch(err) {
+            console.error(err)
+        }
+    }, 1000);
 });
 
 app.listen(8000, function() {
