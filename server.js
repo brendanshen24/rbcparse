@@ -6,7 +6,7 @@ const fs = require("fs");
 const createCsvWriter = require('csv-writer').createObjectCsvWriter;
 const pdf = require('pdf-parse');
 const months = ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC',]
-
+const PORT = process.env.PORT || 80;
 global.thing = ''
 
 const monthcheck = (text) =>{
@@ -139,6 +139,6 @@ app.post('/delete',function(req, res) {
     }, 1000);
 });
 
-app.listen(500, function() {
+app.listen(PORT, function() {
     console.log('App running on port 8000');
 });
