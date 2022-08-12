@@ -139,6 +139,4 @@ app.post('/delete',function(req, res) {
     }, 1000);
 });
 
-app.listen(process.env.PORT || 5000,"rbc-pdf-to-csv.herokuapp.com", function() {
-    console.log('App running on port 8000');
-});
+app.listen(process.env.PORT,process.env.IP);
