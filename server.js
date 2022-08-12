@@ -8,7 +8,6 @@ const pdf = require('pdf-parse');
 const months = ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC',]
 
 global.thing = ''
-app.set('port', (process.env.PORT || 4000));
 
 const monthcheck = (text) =>{
     for (let i = 0; i < months.length; i++) {
@@ -140,6 +139,6 @@ app.post('/delete',function(req, res) {
     }, 1000);
 });
 
-app.listen(app.get('port'), function() {
-  console.log('Node app is running on port', app.get('port'));
+app.listen(8000, function() {
+    console.log('App running on port 8000');
 });
