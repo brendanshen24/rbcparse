@@ -68,7 +68,7 @@ return true;
           for(var x = 0; x<this.state.selectedFile.length; x++) {
               data.append('file', this.state.selectedFile[x])
           }
-          axios.post("http://24.84.236.252:8000/upload", data, {
+          axios.post("/upload", data, {
               onUploadProgress: ProgressEvent => {
                   this.setState({
                       loaded: (ProgressEvent.loaded / ProgressEvent.total*100),
@@ -85,7 +85,7 @@ return true;
     }
     onClick2Handler = () => {
       const data = 'del'
-            axios.post("http://24.84.236.252:8000/delete", data, {
+            axios.post("/delete", data, {
                 onUploadProgress: ProgressEvent => {
                     this.setState({
                         loaded: (ProgressEvent.loaded / ProgressEvent.total*100),
