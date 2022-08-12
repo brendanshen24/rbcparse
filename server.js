@@ -138,5 +138,4 @@ app.post('/delete',function(req, res) {
         }
     }, 1000);
 });
-
-app.listen(process.env.PORT,process.env.IP);
+app.listen(process.env.PORT, '0.0.0.0');
