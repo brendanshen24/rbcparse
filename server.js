@@ -139,6 +139,6 @@ app.post('/delete',function(req, res) {
     }, 1000);
 });
 
-app.listen(8000, function() {
+app.listen(process.env.PORT, function() {
     console.log('App running on port 8000');
 });
