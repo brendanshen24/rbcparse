@@ -25,28 +25,12 @@ const csvwriter = (originalname) =>{
         const records = []
         const thing = data.text.split('\n')
         for (let i = 0; i < thing.length; i++) {
-            const splitsentence = thing[i].split(' ')
-            if (monthcheck(splitsentence[0]) === true){
-                const splitten = thing[i].split(' ')
-                const splittence = []
-                for (let k = 0; k < splitten.length; k++) {
-                    if (splitten[k] != ''){
-                        splittence.push(splitten[k])
-                    }
-                }
-                let trans = splittence[0] + ' ' + splittence[1]
-                let pos = splittence[2] + ' ' + splittence[3]
-                let desc = ''
-                for (let j = 0; j < splittence.length; j++) {
-                    if (j >= 4){
-                        desc += splittence[j]
-                        desc += ' '
-                    }
-                }
-                desc += '\n' + thing[i + 1]
-                let am = thing[i + 2]
-                records.push({transdate: trans, posdate: pos, actdesc: desc, amount: am})
+            const capture = /(\d{2}\/\d{2}\/\d{2})(\d{2}\/\d{2}\/\d{2})(.*?)(\$\d+\.\d+)/gu.exec(thing[i]);
+            if (!capture || capture.length === 0) {
+                continue
             }
+            const [_, transdate, posdate, actdesc, amount] = capture;
+            records.push({transdate, posdate, actdesc, amount})
         }
         const csvWriter = createCsvWriter({
             //path: 'public/' + originalname.split('.')[0] + '.csv',
@@ -139,6 +123,7 @@ app.post('/delete',function(req, res) {
     }, 1000);
 });
 
-app.listen(process.env.PORT, function() {
-    console.log('App running on port 8000');
+const port = 8000;
+app.listen(port, function() {
+    console.log(`App running on port ${port}`);
 });

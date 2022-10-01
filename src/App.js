@@ -37,7 +37,7 @@ class App extends Component {
   }
   maxSelectFile=(event)=>{
     let files = event.target.files
-        if (files.length > 3) { 
+        if (files.length > 3) {
            const msg = 'Only 3 can be uploaded at a time'
            event.target.value = null
            toast.warn(msg)
@@ -85,7 +85,7 @@ return true;
     }
     onClick2Handler = () => {
       const data = 'del'
-            axios.post("http://localhost:8000/delete", data, {
+            axios.post("http://localhost:8081/delete", data, {
                 onUploadProgress: ProgressEvent => {
                     this.setState({
                         loaded: (ProgressEvent.loaded / ProgressEvent.total*100),
